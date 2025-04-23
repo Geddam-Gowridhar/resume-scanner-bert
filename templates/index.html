@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Scanner</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Custom styles for loading spinner */
+        .spinner-border {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Resume Scanner</a>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Scan Your Resume</h1>
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="form-group">
+                        <label for="resume">Upload Resume (PDF)</label>
+                        <input type="file" class="form-control-file" id="resume" name="resume" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_desc">Job Description</label>
+                        <textarea class="form-control" id="job_desc" name="job_desc" rows="4" placeholder="Enter the job description here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Scan Resume <i class="fas fa-upload"></i>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
+                </form>
+
+                {% if error_message %}
+                    <div class="alert alert-danger mt-4 text-center">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+
+                {% if score is not none %}
+                    <div class="alert alert-success mt-4 text-center">
+                        Fit Score: {{ (score * 100) | round(0) }}%<br>
+                        <strong>Score Level:</strong> 
+                        {% if score < 0.2 %}
+                            <span class="text-danger">Low</span>
+                        {% elif score < 0.4 %}
+                            <span class="text-warning">Moderate</span>
+                        {% elif score < 0.6 %}
+                            <span class="text-info">Good</span>
+                        {% elif score < 0.8 %}
+                            <span class="text-primary">High</span>
+                        {% else %}
+                            <span class="text-success">Excellent</span>
+                        {% endif %}
+                        <br>
+                        <strong>Suggestions for Improvement:</strong>
+                        <ul>
+                            <li>
+                                <strong>Highlight relevant skills:</strong> Ensure that skills mentioned in the job description are clearly highlighted in your resume. 
+                                <em>(e.g., if the job requires "project management," make sure this skill is prominently displayed.)</em>
+                            </li>
+                            <li>
+                                <strong>Customize your resume:</strong> Tailor your resume for each application by adjusting your summary and experiences to match the job requirements.
+                                <em>(Use specific examples that relate to the job you are applying for.)</em>
+                            </li>
+                            <li>
+                                <strong>Incorporate keywords:</strong> Use the same terminology as the job description to improve keyword matching.
+                                <em>(Identify key phrases in the job description and include them in your resume.)</em>
+                            </li>
+                            <li>
+                                <strong>Quantify your achievements:</strong> Use metrics to demonstrate your impact.
+                                <em>(Instead of saying "managed a team," say "managed a team of 5, increasing productivity by 20%." )</em>
+                            </li>
+                            <li>
+                                <strong>Include relevant projects:</strong> List any projects that showcase your skills related to the job.
+                                <em>(Highlight specific contributions and outcomes from these projects.)</em>
+                            </li>
+                            <li>
+                                <strong>Showcase certifications:</ <strong>Showcase certifications:</strong> Include any relevant certifications that align with the job description.
+                                <em>(Certifications can enhance your credibility and demonstrate your commitment to professional development.)</em>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript to handle form submission and loading spinner
+        $(document).ready(function() {
+            $('#uploadForm').on('submit', function() {
+                $('.spinner-border').show();
+            });
+        });
+    </script>
+</body>
+</html>
