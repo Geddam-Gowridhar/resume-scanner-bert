@@ -5,3 +5,4 @@ torch
 pdfminer.six
 scikit-learn
 numpy
+gunicorn
